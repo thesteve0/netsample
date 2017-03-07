@@ -11,12 +11,21 @@ namespace WebCore.netsample
     {
         public static void Main(string[] args)
         {
+          var config = new ConfigurationBuilder()
+                .AddEnvironmentVariables("")
+            .Build();
+
+            var url = config["ASPNETCORE_URLS"] ?? "http://*:8080";
+
             var host = new WebHostBuilder()
                 .UseKestrel()
-                .UseStartup<Program>()
+                .UseContentRoot(Directory.GetCurrentDirectory())
+                .UseIISIntegration()
+                .UseStartup<Startup>()
+                .UseUrls(url)
                 .Build();
-            host.Run();
 
+            host.Run();
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
